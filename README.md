@@ -1,4 +1,4 @@
 brief-vorlagen
 ==============
 
-Brief-Vorlagen
+Postalische Korrespondenz vermittels Markdown/LaTeX/Pandoc.
