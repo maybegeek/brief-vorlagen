@@ -1,0 +1,137 @@
+\documentclass[backaddress=underlined,fontsize=12pt,parskip=half,firsthead=off,enlargefirstpage=true]{scrlttr2}
+
+\usepackage{polyglossia}
+\setdefaultlanguage[spelling=new]{german}
+\setmainlanguage[babelshorthands=false]{german}
+%\usepackage[autostyle,german=guillemets]{csquotes}
+\usepackage[autostyle,german=quotes]{csquotes}
+\MakeOuterQuote{"}
+$if(Lang)$\setotherlanguage{$Lang$}$else$$endif$
+
+\usepackage{xltxtra}
+\usepackage{fixltx2e}
+\usepackage{ifthen}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{tikz,pgf}
+\usetikzlibrary{calc}
+\usepackage{kvoptions}
+\usepackage{comment}
+
+\usepackage[absolute]{textpos}
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{\TPHorizModule}
+
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+
+
+\newcommand{\BriefCI}{$if(BriefCI)$$BriefCI$$else$none$endif$}
+\newcommand{\BriefStil}{$if(BriefStil)$$BriefStil$$else$none$endif$}
+\newcommand{\BriefFont}{$if(BriefFont)$$BriefFont$$else$none$endif$}
+
+
+\ifthenelse{\equal{\BriefFont}{frutiger}}{
+\setmainfont{Frutiger Next LT W1G}
+}{}
+
+\ifthenelse{\equal{\BriefFont}{fraktur}}{
+%for old school black letter / gebrochene schriften
+\setmainfont[%
+  RawFeature=-calt,%
+  Path=./Template/Fonts/UnifrakturMaguntia.2014-07-06/,%
+  UprightFont=UnifrakturMaguntia.ttf,%
+  BoldFont=UnifrakturMaguntia.ttf,%
+  BoldFeatures={FakeBold=1.8},%
+  ItalicFont=UnifrakturMaguntia.ttf,%
+  BoldItalicFont=UnifrakturMaguntia.ttf,%
+  BoldItalicFeatures={FakeBold=1.8},%
+%  Numbers=Uppercase,%
+  Ligatures=Historic,%
+  StylisticSet=2,%
+  CharacterVariant=11,%
+  CharacterVariant=12,%
+  CharacterVariant=13,%
+  CharacterVariant=14,%
+  CharacterVariant=15,%
+  CharacterVariant=19%  
+]{UnifrakturMaguntiaAlt}
+}{}
+
+\setkomavar{backaddress}{$if(FensterRueck)$$FensterRueck$$else$Universität Regensburg · 93040 Regensburg$endif$}
+\setkomafont{backaddress}{\rmfamily}
+
+\newkomavar{orgaA}
+\setkomavar{orgaA}{$if(OrgaA)$$OrgaA$$else$Orga A$endif$}
+
+\newkomavar{orgaB}
+\setkomavar{orgaB}{$if(OrgaB)$$OrgaB$$else$Orga B$endif$}
+
+\newkomavar{orgaC}
+\setkomavar{orgaC}{$if(OrgaC)$$OrgaC$$else$Orga C$endif$}
+
+\setkomavar{fromname}{$if(VonName)$$VonName$$else$Absendername$endif$}
+\setkomavar{fromaddress}{$if(VonStr)$$VonStr$$else$Straße$endif$\\$if(VonOrt)$$VonOrt$$else$Ort$endif$}
+
+\makeatletter
+\newlength{\mm}
+\setlength{\mm}{1mm}
+\setlength{\unitlength}{\mm}
+%Anpassung der Brieffensterdimensionen
+\@setplength{toaddrhpos}{26\mm}
+\@setplength{toaddrvpos}{50\mm}
+\@setplength{toaddrwidth}{80\mm}
+\@setplength{toaddrheight}{40\mm}
+%Anpassung der Absenderdimensionen
+\@setplength{lochpos}{8.6\mm}
+\@setplength{locvpos}{26.4\mm}
+\@setplength{locwidth}{72\mm}
+%Anpassung der Falt- und Lochmarken
+\@setplength{foldmarkhpos}{4.5\mm}
+\@setplength{tfoldmarklength}{4\mm}
+\@setplength{bfoldmarklength}{4\mm}
+\@setplength{pfoldmarklength}{6\mm}
+\makeatother
+
+\setkomavar{location}{%
+  \fontsize{7}{8}\selectfont\textbf{\usekomavar[\MakeUppercase]{orgaA}}\\[2.2mm]%
+  \fontsize{12}{13}\selectfont\usekomavar{orgaB}\\[1mm]%
+  \fontsize{12}{13}\selectfont\usekomavar{orgaC}\\[4.4mm]%
+  \fontsize{8}{9}\selectfont\textbf{\usekomavar{fromname}}
+}
+
+%Reihenfolge der Geschäftszeileneinträge auf CI anpassen
+\removereffields
+$if(UnserZeichen)$\setkomavar{myref}{$UnserZeichen$}$else$$endif$
+\addtoreffields{myref}
+$if(IhrZeichen)$\setkomavar{yourref}[Ihr Zeichen/Ihre Nachricht]{$IhrZeichen$}$else$$endif$
+\addtoreffields{yourref}
+$if(Ansprechp)$\setkomavar{customer}[Ihr Ansprechpartner]{$Ansprechp$}$else$$endif$
+\addtoreffields{customer}
+
+
+
+%%
+\setlength{\textwidth}{150mm}%
+\begin{document}
+
+\ifthenelse{\equal{\BriefCI}{UR}}{
+  \ifthenelse{\equal{\BriefStil}{intern}}{
+  \begin{textblock}{4}(1.4,1.0)
+  \includegraphics[scale=1]{Template/uni-regensburg-intern/logo-uni-intern}
+  \end{textblock}
+  }{}
+}{}
+
+\begin{letter}{$if(AnName)$$AnName$$else$$endif$\\$if(AnStr)$$AnStr$$else$$endif$\\$if(AnOrt)$$AnOrt$$else$$endif$}
+
+\raggedright
+
+\opening{\textbf{$if(Betreff)$$Betreff$$else$Betreff,$endif$}}
+
+$body$
+
+$if(Gruss)$\closing{$Gruss$}$else$$endif$
+
+\end{letter}
+\end{document}
