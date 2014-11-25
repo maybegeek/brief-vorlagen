@@ -26,16 +26,30 @@ $if(Lang)$\setotherlanguage{$Lang$}$else$$endif$
 \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
 
 
-\newcommand{\BriefCI}{$if(BriefCI)$$BriefCI$$else$none$endif$}
-\newcommand{\BriefStil}{$if(BriefStil)$$BriefStil$$else$none$endif$}
-\newcommand{\BriefFont}{$if(BriefFont)$$BriefFont$$else$none$endif$}
+\newcommand{\BriefCI}{$if(BriefCI)$$BriefCI$$endif$}
+\newcommand{\BriefStil}{$if(BriefStil)$$BriefStil$$endif$}
+\newcommand{\BriefFont}{$if(BriefFont)$$BriefFont$$endif$}
 
+\newkomavar{VonStr}
+\setkomavar{VonStr}{$if(VonStr)$$VonStr$$endif$}
+\newkomavar{VonOrt}
+\setkomavar{VonOrt}{$if(VonOrt)$$VonOrt$$endif$}
+\newkomavar{VonTel}
+\setkomavar{VonTel}{$if(VonTel)$$VonTel$$endif$}
+\newkomavar{VonFax}
+\setkomavar{VonFax}{$if(VonFax)$$VonFax$$endif$}
+\newkomavar{VonZimmer}
+\setkomavar{VonZimmer}{$if(VonZimmer)$$VonZimmer$$endif$}
+\newkomavar{VonEmail}
+\setkomavar{VonEmail}{$if(VonEmail)$$VonEmail$$endif$}
+\newkomavar{VonUrl}
+\setkomavar{VonUrl}{$if(VonUrl)$$VonUrl$$endif$}
 
-\ifthenelse{\equal{\BriefFont}{frutiger}}{
+\ifthenelse{\equal{\BriefFont}{frutiger}}{%
 \setmainfont{Frutiger Next LT W1G}
 }{}
 
-\ifthenelse{\equal{\BriefFont}{fraktur}}{
+\ifthenelse{\equal{\BriefFont}{fraktur}}{%
 %for old school black letter / gebrochene schriften
 \setmainfont[%
   RawFeature=-calt,%
@@ -58,17 +72,37 @@ $if(Lang)$\setotherlanguage{$Lang$}$else$$endif$
 ]{UnifrakturMaguntiaAlt}
 }{}
 
+\ifthenelse{\equal{\BriefFont}{lato}}{%
+\setmainfont[%
+  Path=./Template/Fonts/Lato/,%
+  UprightFont=Lato-Regular.ttf,%
+  BoldFont=Lato-Bold.ttf,%
+  ItalicFont=Lato-Italic.ttf,%
+  BoldItalicFont=Lato-BoldItalic.ttf,%
+]{DieGuteLato}
+}{}
+
+\ifthenelse{\equal{\BriefFont}{ubuntu}}{%
+\setmainfont[%
+  Path=./Template/Fonts/Ubuntu/,%
+  UprightFont=Ubuntu-Regular.ttf,%
+  BoldFont=Ubuntu-Bold.ttf,%
+  ItalicFont=Ubuntu-Italic.ttf,%
+  BoldItalicFont=Ubuntu-BoldItalic.ttf,%
+]{DieUbuntu}
+}{}
+
 \setkomavar{backaddress}{$if(FensterRueck)$$FensterRueck$$else$Universität Regensburg · 93040 Regensburg$endif$}
 \setkomafont{backaddress}{\rmfamily}
 
 \newkomavar{orgaA}
-\setkomavar{orgaA}{$if(OrgaA)$$OrgaA$$else$Orga A$endif$}
+\setkomavar{orgaA}{$if(OrgaA)$$OrgaA$$endif$}
 
 \newkomavar{orgaB}
-\setkomavar{orgaB}{$if(OrgaB)$$OrgaB$$else$Orga B$endif$}
+\setkomavar{orgaB}{$if(OrgaB)$$OrgaB$$endif$}
 
 \newkomavar{orgaC}
-\setkomavar{orgaC}{$if(OrgaC)$$OrgaC$$else$Orga C$endif$}
+\setkomavar{orgaC}{$if(OrgaC)$$OrgaC$$endif$}
 
 \setkomavar{fromname}{$if(VonName)$$VonName$$else$Absendername$endif$}
 \setkomavar{fromaddress}{$if(VonStr)$$VonStr$$else$Straße$endif$\\$if(VonOrt)$$VonOrt$$else$Ort$endif$}
@@ -94,10 +128,24 @@ $if(Lang)$\setotherlanguage{$Lang$}$else$$endif$
 \makeatother
 
 \setkomavar{location}{%
-  \fontsize{7}{8}\selectfont\textbf{\usekomavar[\MakeUppercase]{orgaA}}\\[2.2mm]%
-  \fontsize{12}{13}\selectfont\usekomavar{orgaB}\\[1mm]%
-  \fontsize{12}{13}\selectfont\usekomavar{orgaC}\\[4.4mm]%
-  \fontsize{8}{9}\selectfont\textbf{\usekomavar{fromname}}
+  \ifkomavarempty{orgaA}{}{%
+  \fontsize{7}{8}\selectfont\textbf{\usekomavar[\MakeUppercase]{orgaA}}\\[2.2mm]}%
+  \ifkomavarempty{orgaB}{}{%
+  \fontsize{12}{13}\selectfont\usekomavar{orgaB}\\[1mm]}%
+  \ifkomavarempty{orgaC}{\vspace*{6mm}}{%
+  \fontsize{12}{13}\selectfont\usekomavar{orgaC}\\[4.4mm]}%
+  \fontsize{8}{9}\selectfont\textbf{\usekomavar{fromname}}\\%
+  \ifkomavarempty{VonStr}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonStr}}\\}
+  \ifkomavarempty{VonOrt}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonOrt}}\\}
+  \ifkomavarempty{VonTel}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonTel}}\\}
+  \ifkomavarempty{VonFax}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonFax}}\\}
+  \ifkomavarempty{VonZimmer}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonZimmer}}\\}
+  \ifkomavarempty{VonStr}{\ifkomavarempty{VonOrt}{}{\vspace*{2.5mm}}}{\vspace*{2.5mm}}
+  \ifkomavarempty{VonStr}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonStr}}\\}
+  \ifkomavarempty{VonOrt}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonOrt}}\\}  
+  \ifkomavarempty{VonEmail}{\ifkomavarempty{VonUrl}{}{\vspace*{2.5mm}}}{\vspace*{2.5mm}}
+  \ifkomavarempty{VonEmail}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonEmail}}\\}
+  \ifkomavarempty{VonUrl}{}{\fontsize{8}{9}\selectfont{\usekomavar{VonUrl}}\\}
 }
 
 %Reihenfolge der Geschäftszeileneinträge auf CI anpassen
@@ -110,12 +158,10 @@ $if(Ansprechp)$\setkomavar{customer}[Ihr Ansprechpartner]{$Ansprechp$}$else$$end
 \addtoreffields{customer}
 
 
-
-%%
 \setlength{\textwidth}{150mm}%
 \begin{document}
 
-\ifthenelse{\equal{\BriefCI}{UR}}{
+\ifthenelse{\equal{\BriefCI}{UR}}{%
   \ifthenelse{\equal{\BriefStil}{intern}}{
   \begin{textblock}{4}(1.4,1.0)
   \includegraphics[scale=1]{Template/uni-regensburg-intern/logo-uni-intern}
@@ -123,7 +169,7 @@ $if(Ansprechp)$\setkomavar{customer}[Ihr Ansprechpartner]{$Ansprechp$}$else$$end
   }{}
 }{}
 
-\begin{letter}{$if(AnName)$$AnName$$else$$endif$\\$if(AnStr)$$AnStr$$else$$endif$\\$if(AnOrt)$$AnOrt$$else$$endif$}
+\begin{letter}{$if(AnName)$$AnName$$endif$\\$if(AnStr)$$AnStr$$endif$\\$if(AnOrt)$$AnOrt$$endif$}
 
 \raggedright
 
